@@ -1,0 +1,30 @@
+# ============================================================
+# Article NER Service — Requirements
+# Python >= 3.10 recommended
+# Pin versions for reproducibility
+# ============================================================
+
+# ----- Web framework -----
+fastapi==0.115.12
+uvicorn[standard]==0.34.2
+
+# ----- NLP core -----
+spacy==3.8.7
+
+# ----- Data handling -----
+pandas==2.2.3
+numpy==1.26.4
+
+# ----- Deduplication / similarity -----
+datasketch==1.6.5        # MinHash LSH
+
+# ----- Testing -----
+pytest==8.3.5
+httpx==0.28.1            # async test client for FastAPI (TestClient)
+
+# ----- Utilities -----
+python-dotenv==1.1.0
+pydantic==2.11.3         # bundled with FastAPI, pinned for clarity
+
+# ----- Optional (annotation conversion) -----
+# srsly==2.5.1           # sudah termasuk di spaCy; uncomment jika dipakai standalone

@@ -1,0 +1,77 @@
+# ============================================================
+# Article NER Service — .gitignore
+# ============================================================
+
+# ---------- Data (artikel asli — JANGAN di-commit) ----------
+data/raw/
+dataset_online_news_malaysia/
+sample/
+*.csv
+!data/evaluation_examples.json
+
+# ---------- Model artefak besar ---------
+models/ner_model/
+*.model
+*.pkl
+*.bin
+*.pt
+*.pth
+*.safetensors
+en_core_web_*/
+xx_ent_wiki_*/
+xlm-roberta-*/
+
+# ---------- Environment & secret --------
+.env
+.env.*
+!.env.example
+
+# ---------- Python ----------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ---------- Virtual environment ---------
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ---------- Testing ---------------------
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.coveragerc
+.tox/
+
+# ---------- IDE / OS --------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ---------- Logs & temp -----------------
+*.log
+logs/
+tmp/
+temp/
+.md
+
+# ---------- spaCy / HuggingFace cache ---
+.spacy/
+.cache/
+transformers_cache/
