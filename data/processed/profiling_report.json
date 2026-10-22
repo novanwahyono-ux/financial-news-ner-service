@@ -1,0 +1,31 @@
+{
+  "total_rows": 1291,
+  "rows_per_clipping": {
+    "Maybank Group": 534,
+    "CIMB Group Malaysia": 347,
+    "Maybank CSR": 160,
+    "RHB Bank": 105,
+    "Hong Leong Bank": 96,
+    "Maybank Foundation": 29,
+    "MDV": 18,
+    "Public Bank Berhad": 2
+  },
+  "unique_original_id": 846,
+  "duplicate_rows": 445,
+  "unique_title_body": 741,
+  "unique_body": 720,
+  "missing_title": 0,
+  "missing_body": 0,
+  "entities_empty_pct": 100.0,
+  "language_unique_articles": {
+    "en": 656,
+    "ms": 146,
+    "zh": 28,
+    "id": 14,
+    "vi": 1,
+    "es": 1
+  },
+  "date_min": "2026-09-07 01:00:00",
+  "date_max": "2026-10-07 11:20:00",
+  "unparsed_dates": 0
+}
