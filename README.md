@@ -91,7 +91,7 @@ uvicorn src.api:app --host 127.0.0.1 --port 8000 --reload
 # Atau
 python -m src.api
 ```
-Buka browser pada: **http://127.0.0.1:8000**
+Buka browser pada: **http://127.0.0.1:8000** 
 
 ### 3.2 Alur Reproduksi Penuh (Fase 1 s.d. 8)
 Setiap tahapan dapat dijalankan ulang secara mandiri dengan hasil yang deterministik:
