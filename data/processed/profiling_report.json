@@ -46,5 +46,20 @@
   "reference_check": {
     "deviations": {},
     "status": "OK — semua sesuai referensi"
-  }
+  },
+  "duplicate_rows": 445,
+  "missing_title": 0,
+  "missing_body": 0,
+  "entities_empty_pct": 100.0,
+  "language_unique_articles": {
+    "en": 656,
+    "ms": 146,
+    "zh": 28,
+    "id": 14,
+    "vi": 1,
+    "es": 1
+  },
+  "date_min": "2026-09-07 01:00:00",
+  "date_max": "2026-10-07 11:20:00",
+  "unparsed_dates": 0
 }

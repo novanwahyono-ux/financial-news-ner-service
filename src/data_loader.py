@@ -20,6 +20,7 @@ import pandas as pd
 
 from src.config import (
     CSV_SEPARATOR,
+    CLIPPING_MAP,
     DATA_DIR,
     DATE_FORMAT,
     REQUIRED_COLUMNS,
@@ -63,11 +64,16 @@ def _clean_dataframe(df: pd.DataFrame, source_file: str) -> pd.DataFrame:
             df[col] = pd.NA
 
     # Hapus awalan kutip pada kolom kategorikal / ID
-    for col in ("language", "original_id"):
+    for col in ("language", "original_id", "source_name"):
         if col in df.columns:
             df[col] = _strip_leading_quote(df[col].fillna(""))
             # Kembalikan string kosong ke NaN supaya konsisten
             df[col] = df[col].replace("", pd.NA)
+
+    df["clipping_name"] = next(
+        (name for code, name in CLIPPING_MAP.items() if code in source_file),
+        "UNKNOWN",
+    )
 
     # Parse tanggal
     if "date_published" in df.columns:
@@ -142,3 +148,13 @@ def load_all_csvs(data_dir: Path | None = None) -> pd.DataFrame:
     df_all = pd.concat(frames, ignore_index=True)
     logger.info("Total baris setelah penggabungan: %d", len(df_all))
     return df_all
+
+
+def load_all(data_dir: Path | None = None) -> pd.DataFrame:
+    """Compatibility alias for loading all CSV files."""
+    return load_all_csvs(data_dir)
+
+
+def unique_articles(df: pd.DataFrame) -> pd.DataFrame:
+    """Return one row per source article identifier."""
+    return df.drop_duplicates(subset=["original_id"]).reset_index(drop=True)

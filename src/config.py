@@ -20,6 +20,7 @@ load_dotenv()
 # Direktori root proyek (satu level di atas src/)
 # ──────────────────────────────────────────────────────────────
 ROOT_DIR = Path(__file__).resolve().parent.parent
+ROOT = ROOT_DIR
 
 # ──────────────────────────────────────────────────────────────
 # Path data
@@ -37,6 +38,10 @@ DATA_DIR: Path = Path(
 # Direktori output yang aman (di dalam repo, di-gitignore jika perlu)
 DATA_PROCESSED_DIR: Path = ROOT_DIR / "data" / "processed"
 DATA_SPLITS_DIR: Path = ROOT_DIR / "data" / "splits"
+PROCESSED_DIR = DATA_PROCESSED_DIR
+SPLITS_DIR = DATA_SPLITS_DIR
+SPLITS_PATH: Path = DATA_SPLITS_DIR / "splits.json"
+PROFILING_PATH: Path = DATA_PROCESSED_DIR / "profiling_report.json"
 EVALUATION_FILE: Path = ROOT_DIR / "data" / "evaluation_examples.json"
 ANNOTATION_DIR: Path = ROOT_DIR / "data" / "annotations"
 MODELS_DIR: Path = ROOT_DIR / "models"
@@ -74,6 +79,27 @@ MODEL_NAME: str = os.getenv("MODEL_NAME", _default_model)
 TRAIN_RATIO: float = 0.70
 VAL_RATIO: float = 0.15
 TEST_RATIO: float = 0.15   # harus = 1 - TRAIN - VAL
+SPLIT_RATIOS = {
+    "train": TRAIN_RATIO,
+    "val": VAL_RATIO,
+    "test": TEST_RATIO,
+}
+
+# Parameter MinHash LSH untuk deduplikasi artikel
+NUM_PERM: int = 128
+SHINGLE_SIZE: int = 3
+SIMILARITY_THRESHOLD: float = 0.85
+
+CLIPPING_MAP: dict[str, str] = {
+    "9xtqAsPitG": "Hong Leong Bank",
+    "bRQ9afwSIP": "CIMB Group Malaysia",
+    "4sxH8Dz0hr": "Public Bank Berhad",
+    "58yzyiBQ9U": "RHB Bank",
+    "WdjZl0bRfZ": "MDV",
+    "i3BJEnT77K": "Maybank CSR",
+    "nwub4cROX": "Maybank Foundation",
+    "hMxhx9QLTq": "Maybank Group",
+}
 
 # ──────────────────────────────────────────────────────────────
 # Kolom CSV yang dipakai

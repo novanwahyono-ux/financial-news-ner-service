@@ -351,6 +351,66 @@ def main(dry_run: bool = False) -> None:
     logger.info("Dedup report disimpan ke: %s", DEDUP_REPORT_FILE)
 
 
+def run(df: pd.DataFrame | None = None) -> dict:
+    """Run deduplication and return both supported split-file layouts."""
+    df = load_all_csvs() if df is None else df
+    df_unique = df.drop_duplicates(subset=["original_id"]).reset_index(drop=True)
+    id_to_group = build_groups(df_unique)
+    splits = split_groups(id_to_group)
+
+    if not verify_no_leakage(splits):
+        raise RuntimeError("Split gagal: ada kebocoran antar split!")
+
+    group_sizes = defaultdict(int)
+    for group in id_to_group.values():
+        group_sizes[group] += 1
+
+    output = {
+        "meta": {
+            "seed": SEED,
+            "minhash_threshold": MINHASH_THRESHOLD,
+            "minhash_num_perm": MINHASH_NUM_PERM,
+            "ngram_size": NGRAM_SIZE,
+            "train_ratio": TRAIN_RATIO,
+            "val_ratio": VAL_RATIO,
+            "test_ratio": TEST_RATIO,
+            "total_unique_ids": len(df_unique),
+            "split_counts": {name: len(ids) for name, ids in splits.items()},
+            "ratios": {
+                "train": TRAIN_RATIO,
+                "val": VAL_RATIO,
+                "test": TEST_RATIO,
+            },
+            "num_perm": MINHASH_NUM_PERM,
+            "shingle_size": NGRAM_SIZE,
+            "similarity_threshold": MINHASH_THRESHOLD,
+            "unique_articles": len(df_unique),
+            "near_duplicate_groups": len(group_sizes),
+            "articles_in_multi_member_groups": len(df_unique) - len(group_sizes),
+            "counts": {name: len(ids) for name, ids in splits.items()},
+        },
+        "train": sorted(splits["train"]),
+        "val": sorted(splits["val"]),
+        "test": sorted(splits["test"]),
+        "splits": {name: sorted(ids) for name, ids in splits.items()},
+    }
+    SPLITS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    SPLITS_FILE.write_text(
+        json.dumps(output, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    return output
+
+
+def load_splits(path: Path = SPLITS_FILE) -> dict[str, list[str]]:
+    """Load split IDs from either the flat or nested split-file layout."""
+    with path.open(encoding="utf-8") as file:
+        data = json.load(file)
+    if "splits" in data:
+        return data["splits"]
+    return {name: data[name] for name in ("train", "val", "test")}
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Dedup & split dataset NER")
     parser.add_argument("--dry-run", action="store_true", help="Tampilkan statistik tanpa menyimpan file")

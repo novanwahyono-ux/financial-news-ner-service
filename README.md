@@ -1,4 +1,4 @@
-# Article Named-Entity Recognition (NER) Service
+# Financial News Named-Entity Recognition (NER) Service
 
 > **UTS Data Science — Pemantauan Berita Online Malaysia (Studi Kasus Sektor Perbankan)**  
 > Prototipe layanan ekstraksi Named Entity dari judul dan isi artikel berita online Malaysia (Maybank, CIMB, RHB, Hong Leong Bank, Public Bank, MDV).

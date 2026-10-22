@@ -98,6 +98,7 @@ def profile(df: pd.DataFrame) -> dict:
     # ── 2. Duplikat ───────────────────────────────────────────
     dup_by_orig_id = total_rows - df["original_id"].nunique()
     report["duplicates_by_original_id"] = dup_by_orig_id
+    report["duplicate_rows"] = dup_by_orig_id
     report["unique_original_id"] = df["original_id"].nunique()
 
     # Dedup title+body (normalisasi sebelum cek)
@@ -119,6 +120,8 @@ def profile(df: pd.DataFrame) -> dict:
     empty_body = df["body"].fillna("").str.strip().eq("").sum()
     report["empty_title"] = int(empty_title)
     report["empty_body"] = int(empty_body)
+    report["missing_title"] = int(empty_title)
+    report["missing_body"] = int(empty_body)
 
     # ── 4. Distribusi bahasa (setelah dedup original_id) ──────
     df_dedup_id = df.drop_duplicates(subset=["original_id"])
@@ -126,6 +129,7 @@ def profile(df: pd.DataFrame) -> dict:
         df_dedup_id["language"].fillna("unknown").value_counts().to_dict()
     )
     report["language_distribution_after_dedup_original_id"] = lang_dist
+    report["language_unique_articles"] = lang_dist
 
     # ── 5. Statistik panjang teks (body) ─────────────────────
     body_len = df["body"].fillna("").str.len()
@@ -154,6 +158,22 @@ def profile(df: pd.DataFrame) -> dict:
             "Tidak dipakai sebagai supervisi tanpa anotasi manual."
         ),
     }
+    report["entities_empty_pct"] = (
+        round(float((total_rows - entities_non_empty) / total_rows * 100), 2)
+        if total_rows
+        else 0.0
+    )
+
+    dates = df.get("date_published_parsed")
+    if dates is None:
+        dates = (
+            pd.to_datetime(df["date_published"], errors="coerce")
+            if "date_published" in df
+            else pd.Series(pd.NaT, index=df.index)
+        )
+    report["date_min"] = str(dates.min()) if dates.notna().any() else "NaT"
+    report["date_max"] = str(dates.max()) if dates.notna().any() else "NaT"
+    report["unparsed_dates"] = int(dates.isna().sum())
 
     # ── 7. Verifikasi terhadap referensi brief ────────────────
     deviations: dict = {}
