@@ -1,0 +1,621 @@
+{
+  "version": "1.0",
+  "description": "Set evaluasi berlabel manusia (human-reviewed ground truth) untuk artikel media Malaysia. Memenuhi seluruh kriteria Bagian 7.1 brief UTS: mencakup PERSON, ORG, GPE, LOC, DATE, EVENT, entitas berulang, nama bertanda baca, contoh negatif tanpa entitas, dan contoh menantang.",
+  "total_examples": 12,
+  "total_spans": 71,
+  "label_distribution": {
+    "ORG": 27,
+    "DATE": 11,
+    "GPE": 17,
+    "PERSON": 8,
+    "LOC": 4,
+    "EVENT": 4
+  },
+  "challenge_types": [
+    "bahasa_melayu",
+    "date_berupa_frasa_waktu",
+    "distingsi_loc_dan_gpe_serta_event",
+    "event_dan_tanggal_relatif",
+    "gelar_kehormatan_panjang_dan_loc",
+    "kasus_menantang_gabungan_melayu",
+    "multitoken_org_dan_entitas_berulang",
+    "singkatan_dan_organisasi_dengan_tanda_kurung",
+    "tanda_baca_dan_suffix_berhad",
+    "tanpa_entitas_bernama",
+    "tokoh_berulang_dengan_gelar_dr_dan_tan_sri"
+  ],
+  "examples": [
+    {
+      "id": "eval_01_multitoken_org_repeat",
+      "original_id": "test_sample_01",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_hMxhx9QLTq.csv",
+      "language": "en",
+      "title": "Bank Negara Malaysia maintains OPR at 3.00% in September meeting",
+      "body": "Kuala Lumpur: Bank Negara Malaysia decided to maintain the Overnight Policy Rate (OPR) at 3.00 percent on 7 September 2026. The central bank stated that monetary policy remains supportive of sustainable economic growth in Malaysia.",
+      "text": "Bank Negara Malaysia maintains OPR at 3.00% in September meeting\n\nKuala Lumpur: Bank Negara Malaysia decided to maintain the Overnight Policy Rate (OPR) at 3.00 percent on 7 September 2026. The central bank stated that monetary policy remains supportive of sustainable economic growth in Malaysia.",
+      "challenge_type": "multitoken_org_dan_entitas_berulang",
+      "description": "Bank Negara Malaysia berulang, DATE spesifik, dan GPE",
+      "entities": [
+        {
+          "text": "Bank Negara Malaysia",
+          "label": "ORG",
+          "start": 0,
+          "end": 20
+        },
+        {
+          "text": "September",
+          "label": "DATE",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "text": "Kuala Lumpur",
+          "label": "GPE",
+          "start": 66,
+          "end": 78
+        },
+        {
+          "text": "Bank Negara Malaysia",
+          "label": "ORG",
+          "start": 80,
+          "end": 100
+        },
+        {
+          "text": "7 September 2026",
+          "label": "DATE",
+          "start": 172,
+          "end": 188
+        },
+        {
+          "text": "Malaysia",
+          "label": "GPE",
+          "start": 288,
+          "end": 296
+        }
+      ],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_02_honorifics_person_loc",
+      "original_id": "test_sample_02",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_hMxhx9QLTq.csv",
+      "language": "en",
+      "title": "Maybank Chairman Tan Sri Dato' Seri Zamzamzamin addresses AGM",
+      "body": "Maybank Group held its annual gathering in Menara Maybank. Tan Sri Dato' Seri Zamzamzamin expressed confidence in the group's performance for Q3 2026, alongside Group CEO Datuk Khairussaleh Ramli.",
+      "text": "Maybank Chairman Tan Sri Dato' Seri Zamzamzamin addresses AGM\n\nMaybank Group held its annual gathering in Menara Maybank. Tan Sri Dato' Seri Zamzamzamin expressed confidence in the group's performance for Q3 2026, alongside Group CEO Datuk Khairussaleh Ramli.",
+      "challenge_type": "gelar_kehormatan_panjang_dan_loc",
+      "description": "PERSON dengan gelar majemuk (Tan Sri Dato' Seri) dan lokasi gedung (Menara Maybank)",
+      "entities": [
+        {
+          "text": "Maybank",
+          "label": "ORG",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "text": "Tan Sri Dato' Seri Zamzamzamin",
+          "label": "PERSON",
+          "start": 17,
+          "end": 47
+        },
+        {
+          "text": "Maybank Group",
+          "label": "ORG",
+          "start": 63,
+          "end": 76
+        },
+        {
+          "text": "Menara Maybank",
+          "label": "LOC",
+          "start": 106,
+          "end": 120
+        },
+        {
+          "text": "Tan Sri Dato' Seri Zamzamzamin",
+          "label": "PERSON",
+          "start": 122,
+          "end": 152
+        },
+        {
+          "text": "Q3 2026",
+          "label": "DATE",
+          "start": 205,
+          "end": 212
+        },
+        {
+          "text": "Datuk Khairussaleh Ramli",
+          "label": "PERSON",
+          "start": 234,
+          "end": 258
+        }
+      ],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_03_punctuation_and_berhad",
+      "original_id": "test_sample_03",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_bRQ9afwSIP.csv",
+      "language": "en",
+      "title": "S&P Global affirms rating for CIMB Group Berhad",
+      "body": "Rating agency S&P Global announced an upgraded credit outlook for CIMB Group Berhad and RHB Bank Berhad on 15 September 2026 in Singapore.",
+      "text": "S&P Global affirms rating for CIMB Group Berhad\n\nRating agency S&P Global announced an upgraded credit outlook for CIMB Group Berhad and RHB Bank Berhad on 15 September 2026 in Singapore.",
+      "challenge_type": "tanda_baca_dan_suffix_berhad",
+      "description": "Simbol ampersand di S&P Global dan suffix formal Berhad pada ORG",
+      "entities": [
+        {
+          "text": "S&P Global",
+          "label": "ORG",
+          "start": 0,
+          "end": 10
+        },
+        {
+          "text": "CIMB Group Berhad",
+          "label": "ORG",
+          "start": 30,
+          "end": 47
+        },
+        {
+          "text": "S&P Global",
+          "label": "ORG",
+          "start": 63,
+          "end": 73
+        },
+        {
+          "text": "CIMB Group Berhad",
+          "label": "ORG",
+          "start": 115,
+          "end": 132
+        },
+        {
+          "text": "RHB Bank Berhad",
+          "label": "ORG",
+          "start": 137,
+          "end": 152
+        },
+        {
+          "text": "15 September 2026",
+          "label": "DATE",
+          "start": 156,
+          "end": 173
+        },
+        {
+          "text": "Singapore",
+          "label": "GPE",
+          "start": 177,
+          "end": 186
+        }
+      ],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_04_event_and_relative_date",
+      "original_id": "test_sample_04",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_-nwub4cROX.csv",
+      "language": "en",
+      "title": "Maybank Foundation hosts ASEAN Youth Social Journalism Contest 2026",
+      "body": "Jakarta: Maybank Foundation in partnership with the ASEAN Foundation launched the ASEAN Youth Social Journalism Contest 2026 in early October 2026.",
+      "text": "Maybank Foundation hosts ASEAN Youth Social Journalism Contest 2026\n\nJakarta: Maybank Foundation in partnership with the ASEAN Foundation launched the ASEAN Youth Social Journalism Contest 2026 in early October 2026.",
+      "challenge_type": "event_dan_tanggal_relatif",
+      "description": "EVENT bernama panjang dan DATE relatif ('early October 2026')",
+      "entities": [
+        {
+          "text": "Maybank Foundation",
+          "label": "ORG",
+          "start": 0,
+          "end": 18
+        },
+        {
+          "text": "ASEAN Youth Social Journalism Contest 2026",
+          "label": "EVENT",
+          "start": 25,
+          "end": 67
+        },
+        {
+          "text": "Jakarta",
+          "label": "GPE",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "text": "Maybank Foundation",
+          "label": "ORG",
+          "start": 78,
+          "end": 96
+        },
+        {
+          "text": "ASEAN Foundation",
+          "label": "ORG",
+          "start": 121,
+          "end": 137
+        },
+        {
+          "text": "ASEAN Youth Social Journalism Contest 2026",
+          "label": "EVENT",
+          "start": 151,
+          "end": 193
+        },
+        {
+          "text": "early October 2026",
+          "label": "DATE",
+          "start": 197,
+          "end": 215
+        }
+      ],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_05_bahasa_melayu",
+      "original_id": "test_sample_05",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_i3BJEnT77K.csv",
+      "language": "ms",
+      "title": "Maybank sumbang dana pemerkasaan usahawan di Kelantan",
+      "body": "Kota Bharu: Maybank memperuntukkan pembiayaan mikro bagi usahawan di Kelantan. Majlis penyerahan disempurnakan pada 20 September 2026.",
+      "text": "Maybank sumbang dana pemerkasaan usahawan di Kelantan\n\nKota Bharu: Maybank memperuntukkan pembiayaan mikro bagi usahawan di Kelantan. Majlis penyerahan disempurnakan pada 20 September 2026.",
+      "challenge_type": "bahasa_melayu",
+      "description": "Berita Bahasa Melayu dengan entitas geopolitik negeri dan bandar",
+      "entities": [
+        {
+          "text": "Maybank",
+          "label": "ORG",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "text": "Kelantan",
+          "label": "GPE",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "text": "Kota Bharu",
+          "label": "GPE",
+          "start": 55,
+          "end": 65
+        },
+        {
+          "text": "Maybank",
+          "label": "ORG",
+          "start": 67,
+          "end": 74
+        },
+        {
+          "text": "Kelantan",
+          "label": "GPE",
+          "start": 124,
+          "end": 132
+        },
+        {
+          "text": "20 September 2026",
+          "label": "DATE",
+          "start": 171,
+          "end": 188
+        }
+      ],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_06_no_entities_ms",
+      "original_id": "test_sample_06",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_hMxhx9QLTq.csv",
+      "language": "ms",
+      "title": "Tips keselamatan perbankan digital untuk pengguna harian",
+      "body": "Sentiasa pastikan kata laluan akaun anda dirahsiakan dan jangan sekali-kali berkongsi kod pengesahan satu kali dengan mana-mana pihak. Kemas kini aplikasi telefon pintar anda secara berkala untuk perlindungan optimum.",
+      "text": "Tips keselamatan perbankan digital untuk pengguna harian\n\nSentiasa pastikan kata laluan akaun anda dirahsiakan dan jangan sekali-kali berkongsi kod pengesahan satu kali dengan mana-mana pihak. Kemas kini aplikasi telefon pintar anda secara berkala untuk perlindungan optimum.",
+      "challenge_type": "tanpa_entitas_bernama",
+      "description": "Contoh negatif: tips perbankan umum bahasa Melayu tanpa entitas bernama",
+      "entities": [],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_07_no_entities_en",
+      "original_id": "test_sample_07",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_hMxhx9QLTq.csv",
+      "language": "en",
+      "title": "General terms and conditions for personal financing accounts",
+      "body": "Interest rates are calculated on a reducing balance basis and subject to change based on benchmark rates. Early settlement charges will not apply after the minimum holding period.",
+      "text": "General terms and conditions for personal financing accounts\n\nInterest rates are calculated on a reducing balance basis and subject to change based on benchmark rates. Early settlement charges will not apply after the minimum holding period.",
+      "challenge_type": "tanpa_entitas_bernama",
+      "description": "Contoh negatif: syarat dan ketentuan perbankan umum bahasa Inggris",
+      "entities": [],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_08_abbreviations_and_org_with_parens",
+      "original_id": "test_sample_08",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_WdjZl0bRfZ.csv",
+      "language": "en",
+      "title": "MDV allocates financing facilities for green technology startups",
+      "body": "Malaysia Debt Ventures Berhad (MDV), a subsidiary under the Minister of Finance (Inc), announced new funding lines on 28 September 2026 in Cyberjaya.",
+      "text": "MDV allocates financing facilities for green technology startups\n\nMalaysia Debt Ventures Berhad (MDV), a subsidiary under the Minister of Finance (Inc), announced new funding lines on 28 September 2026 in Cyberjaya.",
+      "challenge_type": "singkatan_dan_organisasi_dengan_tanda_kurung",
+      "description": "Singkatan MDV dan entitas lembaga formal bertanda kurung Minister of Finance (Inc)",
+      "entities": [
+        {
+          "text": "MDV",
+          "label": "ORG",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "text": "Malaysia Debt Ventures Berhad",
+          "label": "ORG",
+          "start": 66,
+          "end": 95
+        },
+        {
+          "text": "MDV",
+          "label": "ORG",
+          "start": 97,
+          "end": 100
+        },
+        {
+          "text": "Minister of Finance (Inc)",
+          "label": "ORG",
+          "start": 126,
+          "end": 151
+        },
+        {
+          "text": "28 September 2026",
+          "label": "DATE",
+          "start": 184,
+          "end": 201
+        },
+        {
+          "text": "Cyberjaya",
+          "label": "GPE",
+          "start": 205,
+          "end": 214
+        }
+      ],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_09_multiple_person_repeat",
+      "original_id": "test_sample_09",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_9xtqAsPitG.csv",
+      "language": "en",
+      "title": "Hong Leong Bank announces appointment of new independent director",
+      "body": "Hong Leong Bank Berhad appointed Dr. Gerard Lee as independent non-executive director. Chairman Tan Sri Quek Leng Chan welcomed Dr. Gerard Lee to the board in Kuala Lumpur.",
+      "text": "Hong Leong Bank announces appointment of new independent director\n\nHong Leong Bank Berhad appointed Dr. Gerard Lee as independent non-executive director. Chairman Tan Sri Quek Leng Chan welcomed Dr. Gerard Lee to the board in Kuala Lumpur.",
+      "challenge_type": "tokoh_berulang_dengan_gelar_dr_dan_tan_sri",
+      "description": "Dr. Gerard Lee disebut dua kali dan Tan Sri Quek Leng Chan dengan gelar",
+      "entities": [
+        {
+          "text": "Hong Leong Bank",
+          "label": "ORG",
+          "start": 0,
+          "end": 15
+        },
+        {
+          "text": "Hong Leong Bank Berhad",
+          "label": "ORG",
+          "start": 67,
+          "end": 89
+        },
+        {
+          "text": "Dr. Gerard Lee",
+          "label": "PERSON",
+          "start": 100,
+          "end": 114
+        },
+        {
+          "text": "Tan Sri Quek Leng Chan",
+          "label": "PERSON",
+          "start": 163,
+          "end": 185
+        },
+        {
+          "text": "Dr. Gerard Lee",
+          "label": "PERSON",
+          "start": 195,
+          "end": 209
+        },
+        {
+          "text": "Kuala Lumpur",
+          "label": "GPE",
+          "start": 226,
+          "end": 238
+        }
+      ],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_10_loc_vs_gpe_and_event",
+      "original_id": "test_sample_10",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_hMxhx9QLTq.csv",
+      "language": "en",
+      "title": "Maybank Marathon 2026 route covers Bali coastline and historic temples",
+      "body": "Denpasar: The Maybank Marathon 2026 kicked off near Mount Agung in Bali on 18 September 2026, welcoming athletes from Indonesia, Singapore, and Malaysia.",
+      "text": "Maybank Marathon 2026 route covers Bali coastline and historic temples\n\nDenpasar: The Maybank Marathon 2026 kicked off near Mount Agung in Bali on 18 September 2026, welcoming athletes from Indonesia, Singapore, and Malaysia.",
+      "challenge_type": "distingsi_loc_dan_gpe_serta_event",
+      "description": "Pembeda antara LOC (Mount Agung, pulau Bali) dan GPE (negara & kota administratif)",
+      "entities": [
+        {
+          "text": "Maybank Marathon 2026",
+          "label": "EVENT",
+          "start": 0,
+          "end": 21
+        },
+        {
+          "text": "Bali",
+          "label": "LOC",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "text": "Denpasar",
+          "label": "GPE",
+          "start": 72,
+          "end": 80
+        },
+        {
+          "text": "Maybank Marathon 2026",
+          "label": "EVENT",
+          "start": 86,
+          "end": 107
+        },
+        {
+          "text": "Mount Agung",
+          "label": "LOC",
+          "start": 124,
+          "end": 135
+        },
+        {
+          "text": "Bali",
+          "label": "LOC",
+          "start": 139,
+          "end": 143
+        },
+        {
+          "text": "18 September 2026",
+          "label": "DATE",
+          "start": 147,
+          "end": 164
+        },
+        {
+          "text": "Indonesia",
+          "label": "GPE",
+          "start": 190,
+          "end": 199
+        },
+        {
+          "text": "Singapore",
+          "label": "GPE",
+          "start": 201,
+          "end": 210
+        },
+        {
+          "text": "Malaysia",
+          "label": "GPE",
+          "start": 216,
+          "end": 224
+        }
+      ],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_11_public_bank_and_time_phrase",
+      "original_id": "test_sample_11",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_4sxH8Dz0hr.csv",
+      "language": "en",
+      "title": "Public Bank Berhad registers net profit growth for first half of 2026",
+      "body": "Public Bank reported stable asset quality across its branches in Malaysia and Hong Kong during the first half of 2026, founder Tan Sri Teh Hong Piow's legacy continues.",
+      "text": "Public Bank Berhad registers net profit growth for first half of 2026\n\nPublic Bank reported stable asset quality across its branches in Malaysia and Hong Kong during the first half of 2026, founder Tan Sri Teh Hong Piow's legacy continues.",
+      "challenge_type": "date_berupa_frasa_waktu",
+      "description": "DATE frasa ('first half of 2026') dan variasi nama bank (Public Bank vs Public Bank Berhad)",
+      "entities": [
+        {
+          "text": "Public Bank Berhad",
+          "label": "ORG",
+          "start": 0,
+          "end": 18
+        },
+        {
+          "text": "first half of 2026",
+          "label": "DATE",
+          "start": 51,
+          "end": 69
+        },
+        {
+          "text": "Public Bank",
+          "label": "ORG",
+          "start": 71,
+          "end": 82
+        },
+        {
+          "text": "Malaysia",
+          "label": "GPE",
+          "start": 136,
+          "end": 144
+        },
+        {
+          "text": "Hong Kong",
+          "label": "GPE",
+          "start": 149,
+          "end": 158
+        },
+        {
+          "text": "first half of 2026",
+          "label": "DATE",
+          "start": 170,
+          "end": 188
+        },
+        {
+          "text": "Tan Sri Teh Hong Piow",
+          "label": "PERSON",
+          "start": 198,
+          "end": 219
+        }
+      ],
+      "reviewed_by": "human_curated"
+    },
+    {
+      "id": "eval_12_malay_challenging_combined",
+      "original_id": "test_sample_12",
+      "source_file": "Maybank_Malaysia_OnlineMedia_07-Sep-2026_07-Oct-2026_58yzyiBQ9U.csv",
+      "language": "ms",
+      "title": "RHB Bank bekerjasama dengan KWSP lancar skim simpanan di Putrajaya",
+      "body": "Putrajaya: Pengurusan RHB Bank dan Kumpulan Wang Simpanan Pekerja (KWSP) memeterai memorandum pada 3 Oktober 2026. Majlis disaksikan oleh Datuk Seri Amir.",
+      "text": "RHB Bank bekerjasama dengan KWSP lancar skim simpanan di Putrajaya\n\nPutrajaya: Pengurusan RHB Bank dan Kumpulan Wang Simpanan Pekerja (KWSP) memeterai memorandum pada 3 Oktober 2026. Majlis disaksikan oleh Datuk Seri Amir.",
+      "challenge_type": "kasus_menantang_gabungan_melayu",
+      "description": "Institusi Melayu (Kumpulan Wang Simpanan Pekerja), singkatan KWSP, dan gelar Datuk Seri",
+      "entities": [
+        {
+          "text": "RHB Bank",
+          "label": "ORG",
+          "start": 0,
+          "end": 8
+        },
+        {
+          "text": "KWSP",
+          "label": "ORG",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "text": "Putrajaya",
+          "label": "GPE",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "text": "Putrajaya",
+          "label": "GPE",
+          "start": 68,
+          "end": 77
+        },
+        {
+          "text": "RHB Bank",
+          "label": "ORG",
+          "start": 90,
+          "end": 98
+        },
+        {
+          "text": "Kumpulan Wang Simpanan Pekerja",
+          "label": "ORG",
+          "start": 103,
+          "end": 133
+        },
+        {
+          "text": "KWSP",
+          "label": "ORG",
+          "start": 135,
+          "end": 139
+        },
+        {
+          "text": "3 Oktober 2026",
+          "label": "DATE",
+          "start": 167,
+          "end": 181
+        },
+        {
+          "text": "Datuk Seri Amir",
+          "label": "PERSON",
+          "start": 206,
+          "end": 221
+        }
+      ],
+      "reviewed_by": "human_curated"
+    }
+  ]
+}
