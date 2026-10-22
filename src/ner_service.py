@@ -5,11 +5,8 @@ Modul ini:
   1. Memuat model spaCy yang dikonfigurasi (sekali saat startup)
   2. Menggabungkan title + body dengan separator terdokumentasi
   3. Menjalankan pipeline NER dan mengembalikan entitas dengan offset karakter
-  4. Memastikan output deterministik (no sampling)
-
-Penggunaan:
-    from src.ner_service import extract_entities
-    result = extract_entities(title="...", body="...")
+  4. Melakukan post-processing untuk menggabungkan entitas PERSON yang terpisah
+  5. Memastikan output deterministik (no sampling)
 """
 
 from __future__ import annotations
@@ -37,10 +34,6 @@ logger = logging.getLogger(__name__)
 
 @lru_cache(maxsize=1)
 def _load_model() -> Language:
-    """
-    Muat model spaCy sekali dan cache-nya.
-    Gunakan `disable` untuk komponen yang tidak dibutuhkan (lebih cepat).
-    """
     logger.info("Memuat model NER: %s", MODEL_NAME)
     try:
         nlp = spacy.load(MODEL_NAME, disable=["tagger", "parser", "lemmatizer"])
@@ -54,41 +47,49 @@ def _load_model() -> Language:
 
 
 # ──────────────────────────────────────────────────────────────
+# Helper: Merge adjacent PERSON entities
+# ──────────────────────────────────────────────────────────────
+
+def _merge_adjacent_person_entities(entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """
+    Menggabungkan entitas PERSON yang terpisah berurutan akibat
+    keterbatasan batas token/gelar (misal: "Tan Sri Dato'" + "Seri Zamzamzamin").
+    """
+    if not entities:
+        return []
+
+    merged = []
+    i = 0
+    while i < len(entities):
+        curr = entities[i].copy()
+        while i + 1 < len(entities):
+            nxt = entities[i + 1]
+            # Jika entitas saat ini & berikutnya sama-sama PERSON dan posisinya berdampingan (spasi <= 1)
+            if (
+                curr["label"] == "PERSON"
+                and nxt["label"] == "PERSON"
+                and (nxt["start"] - curr["end"]) <= 1
+            ):
+                gap = " " if (nxt["start"] - curr["end"]) == 1 else ""
+                curr["text"] = curr["text"] + gap + nxt["text"]
+                curr["end"] = nxt["end"]
+                i += 1
+            else:
+                break
+        merged.append(curr)
+        i += 1
+    return merged
+
+
+# ──────────────────────────────────────────────────────────────
 # Fungsi publik
 # ──────────────────────────────────────────────────────────────
 
 def build_analyzed_text(title: str, body: str) -> str:
-    """
-    Gabungkan title dan body dengan separator terdokumentasi.
-    Format: title + "\\n\\n" + body
-    Offset entitas dihitung pada teks gabungan ini.
-    """
     return title + TITLE_BODY_SEPARATOR + body
 
 
 def extract_entities(title: str, body: str) -> dict[str, Any]:
-    """
-    Jalankan NER pada teks gabungan title + body.
-
-    Parameters
-    ----------
-    title : str
-        Judul artikel.
-    body : str
-        Isi artikel.
-
-    Returns
-    -------
-    dict dengan:
-        - entities: list of {text, label, start, end}
-        - meta: {entity_count, model, analyzed_length, title_body_separator}
-
-    Raises
-    ------
-    ValueError
-        Jika kedua title dan body kosong, atau melebihi MAX_INPUT_CHARS.
-    """
-    # Validasi (juga dilakukan di API layer, tapi service harus mandiri)
     title = title or ""
     body = body or ""
 
@@ -106,12 +107,11 @@ def extract_entities(title: str, body: str) -> dict[str, Any]:
     nlp = _load_model()
     doc = nlp(analyzed_text)
 
-    entities = []
+    raw_entities = []
     for ent in doc.ents:
-        # Filter hanya label yang didukung
         if ent.label_ not in SUPPORTED_LABELS:
             continue
-        entities.append(
+        raw_entities.append(
             {
                 "text": ent.text,
                 "label": ent.label_,
@@ -120,10 +120,13 @@ def extract_entities(title: str, body: str) -> dict[str, Any]:
             }
         )
 
+    # Gabungkan entitas PERSON yang terpisah
+    final_entities = _merge_adjacent_person_entities(raw_entities)
+
     return {
-        "entities": entities,
+        "entities": final_entities,
         "meta": {
-            "entity_count": len(entities),
+            "entity_count": len(final_entities),
             "model": MODEL_NAME,
             "analyzed_length": len(analyzed_text),
             "title_body_separator": repr(TITLE_BODY_SEPARATOR),
